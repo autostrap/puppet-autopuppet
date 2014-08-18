@@ -82,9 +82,8 @@ class sys11puppet::profile::master(
   }
  
   file {'/etc/puppet/manifests/site.pp':
-    ensure => link,
-    force  => true,
-    target => "${code_path}/puppet/manifests/puppetmaster_site.pp",
+    ensure => file,
+    source => "module:///modules/${module_name}/puppetmaster_site.pp",
   }
 
   if $repos {
