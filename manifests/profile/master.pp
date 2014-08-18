@@ -4,45 +4,14 @@ class sys11puppet::profile::master(
   $reporturl = hiera('sys11puppet::master::reporturl'),
   $reports = hiera('sys11puppet::master::reports'),
   $modulepath = hiera('sys11puppet::master::modulepath'),
-  $repos = hiera('sys11puppet::master::repos', false)
+  $repos = hiera('sys11puppet::master::repos', false),
+  $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
 ) {
-  # TODO put this in own class?
-  define copy_directory(
-    $source) {
-    $path = split($title, '/')
-    file { "/opt/puppet-modules-vcsrepo/${path[-1]}":
-      ensure  => directory,
-      source  => "$source/$title",
-      recurse => true,
-    }
-  }
-
-  define deploy_repo($repos) {
-    if $repos[$name]['provider'] {
-      $provider = $repos[$name]['provider']
-    } else {
-      $provider = 'git'
-    }
-
-    if $repos[$name]['source'] {
-      $source = $repos[$name]['source']
-    } else {
-      fail('You need to provide a source as parameter!')
-    }
-    vcsrepo { $name:
-      ensure   => present,
-      provider => $provider,
-      source   => $source,
-    }
-
-    if $repos[$name]['include'] {
-      file {'/opt/puppet-modules-vcsrepo':
-        ensure => directory,
-      }
-      copy_directory { $repos[$name]['include']:
-        source  => $name,
-        require => Vcsrepo[$name],
-      } 
+  if $repos {
+    $repos_keys = keys($repos)
+    repodeploy::deploy_repo { $repos_keys:
+      repos             => $repos,
+      include_base_path => $include_base_path,
     }
   }
 
@@ -85,10 +54,4 @@ class sys11puppet::profile::master(
     source => "puppet:///modules/${module_name}/puppetmaster_site.pp",
   }
 
-  if $repos {
-    $repos_keys = keys($repos)
-    deploy_repo { $repos_keys:
-      repos => $repos,
-    }
-  }
 }
