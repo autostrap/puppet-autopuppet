@@ -82,7 +82,7 @@ class sys11puppet::profile::master(
  
   file {'/etc/puppet/manifests/site.pp':
     ensure => file,
-    source => "module:///modules/${module_name}/puppetmaster_site.pp",
+    source => "puppet:///modules/${module_name}/puppetmaster_site.pp",
   }
 
   if $repos {
