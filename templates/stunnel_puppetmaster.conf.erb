@@ -1,0 +1,8 @@
+[puppetmaster]
+accept = :::2342
+CAfile = /var/lib/puppet/ssl/certs/ca.pem
+cert = /var/lib/puppet/ssl/certs/<%= @puppet_master %>.pem
+key = /var/lib/puppet/ssl/private_keys/<%= @puppet_master %>.pem
+exec = /usr/local/bin/puppetmaster_stunnel_clientclean
+verify = 2
+

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# 2014, s.andres@syseleven.de
+#
+# this file is managed by puppet
+
+if [[ ! $SSL_CLIENT_DN ]]; then
+  logger '"$SSL_CLIENT_DN" is empty'
+  exit 1
+fi
+
+cmd="$(puppet cert clean ${SSL_CLIENT_DN#/CN=} 2>&1)"
+
+logger "$cmd"
+echo "$cmd" 2>&1

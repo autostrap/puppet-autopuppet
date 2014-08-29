@@ -6,6 +6,7 @@ class sys11puppet::profile::master(
   $modulepath = hiera('sys11puppet::master::modulepath'),
   $repos = hiera('sys11puppet::master::repos', false),
   $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
+  $clientclean = hiera('sys11puppet::master::clientclean', false),
 ) {
   if $repos {
     $repos_keys = keys($repos)
@@ -13,6 +14,10 @@ class sys11puppet::profile::master(
       repos             => $repos,
       include_base_path => $include_base_path,
     }
+  }
+
+  if $clientclean {
+    class {'sys11puppet::profile::master::clientclean': }
   }
 
   class { 'puppetdb':
