@@ -7,7 +7,7 @@ description "puppetmaster-clean-certificate"
 start on runlevel [016]
 start on stopping networking
 
-start script
+script
   curl -k --cert /var/lib/puppet/ssl/certs/<%= @fqdn -%>.pem --key /var/lib/puppet/ssl/private_keys/<%= @fqdn -%>.pem https://<%= @puppet_master -%>:2342 || true
   rm -rf /var/lib/puppet/ssl
 end script
