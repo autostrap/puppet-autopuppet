@@ -2,6 +2,7 @@ class sys11puppet::profile::agent(
   $puppet_master = hiera('sys11puppet::common::puppet_master'),
   $runinterval = hiera('sys11puppet::agent::runinterval'),
   $noopvalue = hiera('sys11puppet::agent::noop'),
+  $clientclean = hiera('sys11puppet::master::clientclean', false),
 ) {
 
   class {'puppet::agent':
@@ -25,6 +26,10 @@ class sys11puppet::profile::agent(
     ensure  => present,
     setting => 'show_diff',
     value   => 'true',
+  }
+
+  if $clientclean {
+    class {'sys11puppet::profile::agent::clientclean': }
   }
 }
 
