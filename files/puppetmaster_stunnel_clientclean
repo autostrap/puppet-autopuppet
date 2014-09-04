@@ -8,7 +8,11 @@ if [[ ! $SSL_CLIENT_DN ]]; then
   exit 1
 fi
 
-cmd="$(puppet cert clean ${SSL_CLIENT_DN#/CN=} 2>&1)"
+node=${SSL_CLIENT_DN#/CN=}
+
+cmd="$(puppet node clean $node 2>&1 \
+       puppet node deactivate $node 2>&1 \
+       puppet cert clean ${node} 2>&1)"
 
 logger "$cmd"
 echo "$cmd" 2>&1
