@@ -13,8 +13,17 @@ class sys11puppet::profile::master::clientclean(
     ensure  => file,
     content => template("$module_name/stunnel_puppetmaster.conf.erb"),
     require => Package['stunnel4'],
-    notify => Service['stunnel4'],
+    notify => File['/etc/default/stunnel4'],
   }
+
+  file {'/etc/default/stunnel4':
+    ensure  => file,
+    mode    => '0644',
+    source => "puppet:///modules/$module_name/default_stunnel4",
+    require => Package['stunnel4'],
+    notify  => Service['stunnel4'],
+  }
+
 
   file_line { 'enable_stunnel4':
     path   => '/etc/default/stunnel4',
