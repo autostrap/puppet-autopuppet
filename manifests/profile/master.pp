@@ -17,7 +17,10 @@ class sys11puppet::profile::master(
   }
 
   if $clientclean {
-    class {'sys11puppet::profile::master::clientclean': }
+    class {'sys11puppet::profile::master::clientclean': 
+      # stunnel won't start without the SSL certificates generated in the course of master setup.
+      require => Class['::puppet::master'],
+      }
   }
 
   class { 'puppetdb':
