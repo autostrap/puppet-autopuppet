@@ -4,6 +4,7 @@ class sys11puppet::profile::agent(
   $noopvalue = hiera('sys11puppet::agent::noop'),
   $clientclean = hiera('sys11puppet::master::clientclean', false),
   $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
+  $repos = hiera('sys11puppet::master::repos', false),
 ) {
 
   if $repos {
