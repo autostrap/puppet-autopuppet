@@ -41,12 +41,6 @@ class sys11puppet::profile::master(
     target => "${config_path}/puppet/hieradata",
   }
 
-  file {'/etc/puppet/hiera.yaml':
-    ensure => link,
-    force  => true,
-    target => "${config_path}/puppet/hiera.yaml",
-  }
-
   file {'/etc/hiera.yaml':
     ensure => link,
     force  => true,
