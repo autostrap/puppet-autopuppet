@@ -3,7 +3,17 @@ class sys11puppet::profile::agent(
   $runinterval = hiera('sys11puppet::agent::runinterval'),
   $noopvalue = hiera('sys11puppet::agent::noop'),
   $clientclean = hiera('sys11puppet::master::clientclean', false),
+  $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
 ) {
+
+  if $repos {
+    $repos_keys = keys($repos)
+    repodeploy::deploy_repo { $repos_keys:
+      repos             => $repos,
+      include_base_path => $include_base_path,
+    }
+  }
+
 
   class {'puppet::agent':
     puppet_server       => "$puppet_master",
