@@ -6,24 +6,23 @@ class sys11puppet::profile::agent::monitoring(
   if $::clientcert {
     case $monitoring {
       'sensu':  {
-        augeas { 'is_sensu_puppet_member':
-          context => '/files/etc/group',
-          onlyif  => 'match /files/etc/group/puppet size != 0',
-          notify  => Service['sensu-client'],
-          changes => [
-            'set /files/etc/group/puppet/user[.=\'sensu\'] sensu'
-          ],
-        }
 
         file {'/usr/lib/nagios/plugins/check_puppet_agent':
           ensure => file,
-          mode   => 555,
+          mode   => '0555',
           source => "puppet:///modules/$module_name/check_puppet_agent",
         }
 
-        sensu::check{'check_puppet_agent':
-          command => "PATH=\$PATH:/usr/lib/nagios/plugins/ check_puppet_agent",
+        file_line { 'sudo_check_puppet_agent':
+          path    => '/etc/sudoers',
+          line    => 'sensu ALL=(ALL) NOPASSWD: /usr/lib/nagios/plugins/check_puppet_agent',
           require => File['/usr/lib/nagios/plugins/check_puppet_agent'],
+        }
+
+
+        sensu::check{'check_puppet_agent':
+          command => 'sudo /usr/lib/nagios/plugins/check_puppet_agent',
+          require => [File['/usr/lib/nagios/plugins/check_puppet_agent'], File_line['sudo_check_puppet_agent']],
         }
       }
       false:  { }
