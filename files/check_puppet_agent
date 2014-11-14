@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+# 2014, s.andres@syseleven.de
+#
+# Parse last_run_report.yaml and check what puppet's status was on the last run
+# print changes/failure to stdout and return nagios usable exit codes
+#
+
+require 'yaml'
+require 'puppet'
+require 'optparse'
+
+options = OpenStruct.new
+options.report_file = '/var/lib/puppet/state/last_run_report.yaml'
+options.warning = 43200 # 12h
+options.critical = 86400 # 1d
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: check_puppet_agent [options]"
+
+  opts.on('-w [seconds]', OptionParser::DecimalInteger, "warning threshold (default #{options.warning} seconds)") { |v| options.warning = v }
+  opts.on('-c [seconds]', OptionParser::DecimalInteger, "critical threshold (default #{options.critical} seconds)") { |v| options.critical = v }
+  opts.on('-f [filename]', "path to report file (default: #{options.report_file})") { |v| options.report_file = v }
+end.parse!
+
+if ! File.file?(options.report_file)
+  puts "CRITICAL - file '#{options.report_file}' does not exist"
+  exit 2
+end
+
+fileage = (Time.now - File.stat(options.report_file).mtime).to_i
+
+if fileage > options.critical
+  puts "CRITICAL - #{options.report_file} is #{fileage}s old (threshold: #{options.critical})"
+  exit 2
+elsif fileage > options.warning
+  puts "WARNING - #{options.report_file} is #{fileage}s old (threshold: #{options.warning})"
+  exit 1
+end
+
+
+begin
+  report = YAML.load_file(options.report_file)
+rescue => detail
+  puts "Cannot parse #{options.report_file}"
+  puts detail.backtrace
+  puts detail
+  exit 2
+end
+
+
+status = report.status
+ret = []
+
+report.logs.each do |key|
+  if key.tags[0] == 'err'
+    ret << key.message
+  end
+
+  if key.tags[0] == 'notice'
+    if key.message.include? "Would have triggered 'refresh' from"
+      next
+    elsif key.message.include? 'Finished catalog run in'
+      next
+    end
+
+    if key.source == 'Puppet'
+      next
+    end
+
+    ret << "#{key.source}: #{key.message}"
+  end
+end
+
+# changed, unchanged (noop), failed
+
+if status == 'changed'
+  puts "OK - #{ret.length} changes were done:"
+  puts ret
+  exit 0
+elsif status == 'unchanged'
+  # might mean nothing changed or pending changes
+  if ret.length > 0
+    puts "WARNING - #{ret.length} pending changes:"
+    puts ret
+    exit 1
+  else
+    puts 'OK - 0 changes'
+    exit 0
+  end
+elsif status == 'failed'
+  puts "CRITICAL - error on run:"
+  puts ret
+  exit 2
+end
+
+#puts status
+#puts ret
+
