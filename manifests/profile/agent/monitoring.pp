@@ -21,8 +21,10 @@ class sys11puppet::profile::agent::monitoring(
 
 
         sensu::check{'check_puppet_agent':
-          command => 'sudo /usr/lib/nagios/plugins/check_puppet_agent',
-          require => [File['/usr/lib/nagios/plugins/check_puppet_agent'], File_line['sudo_check_puppet_agent']],
+          command     => 'sudo /usr/lib/nagios/plugins/check_puppet_agent',
+          require     => [File['/usr/lib/nagios/plugins/check_puppet_agent'], File_line['sudo_check_puppet_agent']],
+          interval    => 600,
+          occurrences => 2,
         }
       }
       false:  { }
