@@ -16,6 +16,11 @@ class sys11puppet::profile::master::clientclean(
     notify => File['/etc/default/stunnel4'],
   }
 
+  # remove removal of own certificate
+  ensure {'/etc/init/puppetmaster-clean-certificate.conf':
+    ensure => absent,
+  }
+
   file {'/etc/default/stunnel4':
     ensure  => file,
     mode    => '0644',
