@@ -17,7 +17,7 @@ class sys11puppet::profile::master::clientclean(
   }
 
   # remove removal of own certificate
-  ensure {'/etc/init/puppetmaster-clean-certificate.conf':
+  file {'/etc/init/puppetmaster-clean-certificate.conf':
     ensure => absent,
   }
 
