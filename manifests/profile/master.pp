@@ -1,7 +1,7 @@
 class sys11puppet::profile::master(
   $puppet_master = hiera('sys11puppet::common::puppet_master'),
   $config_path = hiera('sys11puppet::master::config_path'),
-  $reporturl = hiera('sys11puppet::master::reporturl'),
+  $reporturl = hiera('sys11puppet::master::reporturl', ''),
   $reports = hiera('sys11puppet::master::reports'),
   $modulepath = hiera('sys11puppet::master::modulepath'),
   $repos = hiera('sys11puppet::master::repos', false),
