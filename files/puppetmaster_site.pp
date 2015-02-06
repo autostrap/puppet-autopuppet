@@ -5,4 +5,10 @@
 Package{
   allow_virtual => true,
 }
+
+stage { 'last': }
+stage { 'first': }
+Stage['first'] -> Stage['main']
+Stage['main'] -> Stage['last']
+
 hiera_include('classes')
