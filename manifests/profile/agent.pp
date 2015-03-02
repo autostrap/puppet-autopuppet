@@ -1,5 +1,6 @@
 class sys11puppet::profile::agent(
   $puppet_master = hiera('sys11puppet::common::puppet_master'),
+  $runstyle = hiera('sys11puppet::agent::runstyle'),
   $runinterval = hiera('sys11puppet::agent::runinterval'),
   $noopvalue = hiera('sys11puppet::agent::noop'),
   $clientclean = hiera('sys11puppet::master::clientclean', false),
@@ -18,6 +19,7 @@ class sys11puppet::profile::agent(
 
   class {'puppet::agent':
     puppet_server       => "$puppet_master",
+    puppet_run_style    => "$runstyle",
     puppet_run_interval => "$runinterval",
   }
 
