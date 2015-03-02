@@ -1,6 +1,9 @@
 class sys11puppet::role::puppetmaster(
   $enable_dashboard = hiera('sys11puppet::dashboard::enable'),
 ) {
+  # os-395, use sys11puppet::role::puppetmaster and ::agent in combination
+  contain puppet::repo::puppetlabs
+
   class {'sys11puppet::profile::master':}
 
   if $enable_dashboard {
