@@ -1,5 +1,5 @@
 class sys11puppet::profile::master(
-  $puppet_master = hiera('sys11puppet::common::puppet_master'),
+  $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
   $config_path = hiera('sys11puppet::master::config_path', undef),
   $reporturl = hiera('sys11puppet::master::reporturl', ''),
   $reports = hiera('sys11puppet::master::reports'),

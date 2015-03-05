@@ -1,5 +1,5 @@
 class sys11puppet::profile::agent::clientclean(
-  $puppet_master = hiera('sys11puppet::common::puppet_master'),
+  $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
 ) {
   if $::fqdn != $puppet_master {
     file {'/etc/init/puppetmaster-clean-certificate.conf':

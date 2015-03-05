@@ -1,5 +1,5 @@
 class sys11puppet::profile::master::clientclean(
-  $puppet_master = hiera('sys11puppet::common::puppet_master'),
+  $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
 ) {
   package {'stunnel4': }
 
