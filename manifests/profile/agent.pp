@@ -42,7 +42,9 @@ class sys11puppet::profile::agent(
   }
 
   if $clientclean {
-    class {'sys11puppet::profile::agent::clientclean': }
+    class {'sys11puppet::profile::agent::clientclean': 
+        enable => $clientclean,
+    }
   }
 }
 
