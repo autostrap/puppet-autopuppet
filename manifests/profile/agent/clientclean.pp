@@ -1,10 +1,19 @@
 class sys11puppet::profile::agent::clientclean(
   $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
+  $enable = false,
 ) {
-  if $::fqdn != $puppet_master {
-    file {'/etc/init/puppetmaster-clean-certificate.conf':
+  $cleanup_script = '/etc/init/puppetmaster-clean-certificate.conf'
+
+  if $::fqdn != $puppet_master and $enable == true {
+    file {$cleanup_script:
       ensure  => file,
       content => template("$module_name/upstart/puppetmaster-clean-certificate.conf.erb"),
     }
+  }
+
+  if $enable == false {
+    file {$cleanup_script:
+      ensure => absent,
+      }
   }
 }
