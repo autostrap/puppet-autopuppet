@@ -14,8 +14,8 @@ class sys11puppet::profile::masterless(
       minute  => "*/${runinterval}"
       }
 
-    # Add normal command
-    cron{'run_puppet_hiera':
+    # Add noop command
+    cron{'run_puppet_hiera noop':
       command => $command_noop,
       user    => root,
       minute  => "*/${runinterval}"
@@ -30,7 +30,7 @@ class sys11puppet::profile::masterless(
       }
 
     # Remove noop command
-    cron{'run_puppet_hiera':
+    cron{'run_puppet_hiera noop':
       ensure  => absent,
       command => $command_noop,
       user    => root,
