@@ -3,10 +3,11 @@ class sys11puppet::profile::master(
   $config_path = hiera('sys11puppet::master::config_path', undef),
   $reporturl = hiera('sys11puppet::master::reporturl', ''),
   $reports = hiera('sys11puppet::master::reports'),
-  $modulepath = hiera('sys11puppet::master::modulepath'),
+  $modulepath = hiera('sys11puppet::master::modulepath', false),
   $repos = hiera('sys11puppet::master::repos', false),
   $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
   $clientclean = hiera('sys11puppet::master::clientclean', false),
+  $environments = hiera('sys11puppet::master::environments', 'config'),
 ) {
   if $repos {
     $repos_keys = keys($repos)
@@ -17,22 +18,29 @@ class sys11puppet::profile::master(
   }
 
   if $clientclean {
-    class {'sys11puppet::profile::master::clientclean': 
+    class {'sys11puppet::profile::master::clientclean':
       # stunnel won't start without the SSL certificates generated in the course of master setup.
       require => Class['::puppet::master'],
       }
   }
 
+  if $modulepath {
+    $modulepath_real = join($modulepath, ':')
+  } else {
+    $modulepath_real = undef
+  }
+
   class { 'puppetdb':
     max_threads => '150',
   }
-  
+
   class {'puppet::master':
     storeconfigs => true,
-    modulepath   => join($modulepath, ':'),
+    modulepath   => $modulepath_real,
     autosign     => true,
     reporturl    => $reporturl,
     reports      => $reports,
+    environments => $environments,
   }
 
   if $config_path
@@ -53,10 +61,9 @@ class sys11puppet::profile::master(
   file {'/etc/puppet/manifests/':
     ensure => directory,
   }
- 
+
   file {'/etc/puppet/manifests/site.pp':
     ensure => file,
     source => "puppet:///modules/${module_name}/puppetmaster_site.pp",
   }
-
 }
