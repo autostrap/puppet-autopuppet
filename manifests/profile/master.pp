@@ -8,6 +8,7 @@ class sys11puppet::profile::master(
   $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
   $clientclean = hiera('sys11puppet::master::clientclean', false),
   $environments = hiera('sys11puppet::master::environments', 'config'),
+  $masterenv = hiera('sys11puppet::master::masterenv', {}),
 ) {
   if $repos {
     $repos_keys = keys($repos)
@@ -24,11 +25,14 @@ class sys11puppet::profile::master(
       }
   }
 
-  if $modulepath {
+  # use deprecated modulepath setting for old-style config environments (dynamic)
+  if $modulepath and $environments == 'config' {
     $modulepath_real = join($modulepath, ':')
   } else {
     $modulepath_real = undef
   }
+
+  create_resources(puppet::masterenv, $masterenv)
 
   class { 'puppetdb':
     max_threads => '150',
@@ -43,8 +47,7 @@ class sys11puppet::profile::master(
     environments => $environments,
   }
 
-  if $config_path
-  {
+  if $config_path {
     file {'/etc/puppet/hieradata':
       ensure => link,
       force  => true,
