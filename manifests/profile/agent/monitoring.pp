@@ -7,6 +7,8 @@ class sys11puppet::profile::agent::monitoring(
     case $monitoring {
       'sensu':  {
 
+        ### Check for successful puppet run ###
+
         file {'/usr/lib/nagios/plugins/check_puppet_agent':
           ensure => file,
           mode   => '0555',
@@ -26,7 +28,25 @@ class sys11puppet::profile::agent::monitoring(
           interval    => 600,
           occurrences => 2,
         }
+
+
+      ### Check for running puppet service ###
+
+      file {'/usr/lib/nagios/plugins/check_puppet_agent_running':
+          ensure => file,
+          mode   => '0555',
+          source => "puppet:///modules/$module_name/check_puppet_agent_running",
+        }
+
+      sensu::check{'puppet_agent_running':
+          command     => '/usr/lib/nagios/plugins/check_puppet_agent_running',
+          require     => File['/usr/lib/nagios/plugins/check_puppet_agent_running'],
+          interval    => 60,
+          occurrences => 1,
+        }
+
       }
+
       false:  { }
       default: { fail("Only sensu monitoring supported ('$monitoring' given)") }
     }

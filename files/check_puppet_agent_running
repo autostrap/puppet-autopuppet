@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# 2015, c.glaubitz@syseleven.de
+
+ret_val=0
+ret_vals=("OK" "WARNING" "CRITICAL")
+
+out=$(service puppet status)
+(($? == 0)) || ret_val=2
+echo "${ret_vals[$ret_val]} $out"
+exit $ret_val
