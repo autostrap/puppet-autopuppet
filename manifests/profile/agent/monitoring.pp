@@ -21,12 +21,6 @@ class sys11puppet::profile::agent::monitoring(
           require => File['/usr/lib/nagios/plugins/check_puppet_agent'],
         }
 
-        # there is no purge on type sensu_check
-        sensu::check{ 'check_puppet_agent':
-          ensure  => absent,
-          command => '/dev/null',
-        }
-
         sensu::check{ 'puppet_agent':
           command     => 'sudo /usr/lib/nagios/plugins/check_puppet_agent',
           require     => [File['/usr/lib/nagios/plugins/check_puppet_agent'], File_line['sudo_check_puppet_agent']],
