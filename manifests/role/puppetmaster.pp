@@ -4,7 +4,7 @@ class sys11puppet::role::puppetmaster(
 ) {
   # os-395, use sys11puppet::role::puppetmaster and ::agent in combination
   contain puppet::repo::puppetlabs
-  contain sys11puppet::profile::reportclean
+  include sys11puppet::profile::reportclean
 
   class {'sys11puppet::profile::master':}
 
