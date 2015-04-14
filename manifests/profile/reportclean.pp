@@ -8,6 +8,7 @@ class sys11puppet::profile::reportclean(
       command => "find /var/lib/puppet/reports -type f -mtime +$max_age -delete",
       user    => 'root',
       hour    => '3',
+      minute  => '0',
     }
   } else {
     cron{'cleanup-puppet-reports':
