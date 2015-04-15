@@ -5,7 +5,7 @@ class sys11puppet::profile::masterless(
     $command_noop = '/usr/local/sbin/run_puppet_hiera --noop --logdest syslog'
     $command = '/usr/local/sbin/run_puppet_hiera --logdest syslog'
 
-  if $noop {
+  if $noopvalue {
     # Remove normal command
     cron{'run_puppet_hiera':
       ensure  => absent,
@@ -16,17 +16,19 @@ class sys11puppet::profile::masterless(
 
     # Add noop command
     cron{'run_puppet_hiera noop':
-      command => $command_noop,
-      user    => root,
-      minute  => "*/${runinterval}"
+      command     => $command_noop,
+      user        => root,
+      environment => 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      minute      => "*/${runinterval}"
       }
   }
   else {
     # Add normal command
     cron{'run_puppet_hiera':
-      command => $command,
-      user    => root,
-      minute  => "*/${runinterval}"
+      command     => $command,
+      user        => root,
+      minute      => "*/${runinterval}",
+      environment => 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       }
 
     # Remove noop command
