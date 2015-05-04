@@ -13,6 +13,7 @@ options = OpenStruct.new
 options.report_file = '/var/lib/puppet/state/last_run_report.yaml'
 options.warning = 43200 # 12h
 options.critical = 86400 # 1d
+critical = false
 
 OptionParser.new do |opts|
   opts.banner = "Usage: check_puppet_agent [options]"
@@ -51,8 +52,11 @@ end
 status = report.status
 ret = []
 
+# iterate over log hash to find out whether there were some error events,
+# catch error/warning messages and skip unwanted stuff
 report.logs.each do |key|
   if key.tags[0] == 'err'
+    critical = true
     ret << key.message
   end
 
@@ -77,6 +81,10 @@ if status == 'changed'
   puts "OK - #{ret.length} changes were done:"
   puts ret
   exit 0
+elsif status == 'failed' or critical
+  puts "CRITICAL - error on run:"
+  puts ret
+  exit 2
 elsif status == 'unchanged'
   # might mean nothing changed or pending changes
   if ret.length > 0
@@ -87,10 +95,6 @@ elsif status == 'unchanged'
     puts 'OK - 0 changes'
     exit 0
   end
-elsif status == 'failed'
-  puts "CRITICAL - error on run:"
-  puts ret
-  exit 2
 end
 
 #puts status
