@@ -40,8 +40,8 @@ class sys11puppet::profile::agent::monitoring(
       sensu::check{'puppet_agent_running':
           command     => '/usr/lib/nagios/plugins/check_puppet_agent_running',
           require     => File['/usr/lib/nagios/plugins/check_puppet_agent_running'],
-          interval    => 60,
-          occurrences => 1,
+          interval    => 600,
+          occurrences => 2,
         }
 
       }

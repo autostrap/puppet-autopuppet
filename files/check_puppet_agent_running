@@ -7,5 +7,5 @@ ret_vals=("OK" "WARNING" "CRITICAL")
 
 out=$(service puppet status)
 (($? == 0)) || ret_val=2
-echo "${ret_vals[$ret_val]} $out"
+echo "${ret_vals[$ret_val]} ${out# \* }"
 exit $ret_val
