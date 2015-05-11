@@ -1,5 +1,5 @@
 # Sets up a puppet master.
-class sys11puppet::role::puppetmaster(
+class sys11puppet::role::puppetmaster_bootstrap(
   $enable_dashboard = hiera('sys11puppet::dashboard::enable'),
 ) {
   # os-395, use sys11puppet::role::puppetmaster and ::agent in combination
