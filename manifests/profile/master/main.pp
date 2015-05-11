@@ -1,4 +1,4 @@
-class sys11puppet::profile::master(
+class sys11puppet::profile::master::main(
   $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
   $config_path = hiera('sys11puppet::master::config_path', undef),
   $reporturl = hiera('sys11puppet::master::reporturl', ''),
@@ -10,8 +10,6 @@ class sys11puppet::profile::master(
   $environments = hiera('sys11puppet::master::environments', 'config'),
   $masterenv = hiera('sys11puppet::master::masterenv', {}),
 ) {
-  include sys11puppet::profile::master::monitoring
-
   if $repos {
     $repos_keys = keys($repos)
     repodeploy::deploy_repo { $repos_keys:
