@@ -6,7 +6,7 @@ class sys11puppet::role::puppetmaster_bootstrap(
   contain puppet::repo::puppetlabs
   include sys11puppet::profile::reportclean
 
-  class {'sys11puppet::profile::master_bootstrap':}
+  class {'sys11puppet::profile::master::main':}
 
   if $enable_dashboard {
     class {'sys11puppet::profile::dashboard':
