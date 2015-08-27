@@ -1,8 +1,8 @@
 class sys11puppet::profile::agent(
   $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
   $runstyle = hiera('sys11puppet::agent::runstyle', 'service'),
-  $runinterval = hiera('sys11puppet::agent::runinterval'),
-  $noopvalue = hiera('sys11puppet::agent::noop'),
+  $runinterval = hiera('sys11puppet::agent::runinterval', '5'),
+  $noopvalue = hiera('sys11puppet::agent::noop', false),
   $clientclean = hiera('sys11puppet::master::clientclean', false),
   $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
   $repos = hiera('sys11puppet::master::repos', false),
