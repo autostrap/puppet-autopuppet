@@ -4,7 +4,6 @@ class sys11puppet::profile::agent::monitoring(
 ) {
   # only run when run via puppet-master
   if ! empty($::servername) {
-    notice("Monitoring is being configured.")
     case $monitoring {
       'sensu':  {
 
