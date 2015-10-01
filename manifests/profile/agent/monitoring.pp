@@ -3,7 +3,7 @@ class sys11puppet::profile::agent::monitoring(
   $monitoring       = hiera('sys11stack::monitoring', false),
 ) {
   # only run when run via puppet-master
-  if $::clientcert {
+  if ! empty($::servername) {
     case $monitoring {
       'sensu':  {
 

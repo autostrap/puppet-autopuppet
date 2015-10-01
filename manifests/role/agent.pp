@@ -3,4 +3,5 @@ class sys11puppet::role::agent() {
   contain puppet::repo::puppetlabs
 
   class {'sys11puppet::profile::agent':}
+  class {'sys11puppet::profile::agent::monitoring':}
 }
