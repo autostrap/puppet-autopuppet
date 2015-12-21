@@ -1,4 +1,4 @@
-class sys11puppet::profile::master::monitoring(
+class autopuppet::profile::master::monitoring(
   $monitoring       = hiera('sys11stack::monitoring', false),
 ) {
   # only run when run via puppet-master

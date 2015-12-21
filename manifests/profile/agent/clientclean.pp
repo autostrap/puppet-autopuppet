@@ -1,5 +1,5 @@
-class sys11puppet::profile::agent::clientclean(
-  $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
+class autopuppet::profile::agent::clientclean(
+  $puppet_master = hiera('autopuppet::common::puppet_master', $::puppet_master),
   $enable = false,
 ) {
   $cleanup_script = '/etc/init/puppetmaster-clean-certificate.conf'

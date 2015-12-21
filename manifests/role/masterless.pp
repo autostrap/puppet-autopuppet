@@ -1,5 +1,5 @@
 # Sets up masterless puppet runs.
-class sys11puppet::role::masterless() {
-  include sys11puppet::profile::reportclean
-  class {'sys11puppet::profile::masterless':}
+class autopuppet::role::masterless() {
+  include autopuppet::profile::reportclean
+  class {'autopuppet::profile::masterless':}
 }

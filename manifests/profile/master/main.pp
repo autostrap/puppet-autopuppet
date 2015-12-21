@@ -1,14 +1,14 @@
-class sys11puppet::profile::master::main(
-  $puppet_master = hiera('sys11puppet::common::puppet_master', $::puppet_master),
-  $config_path = hiera('sys11puppet::master::config_path', undef),
-  $reporturl = hiera('sys11puppet::master::reporturl', ''),
-  $reports = hiera('sys11puppet::master::reports'),
-  $modulepath = hiera('sys11puppet::master::modulepath', false),
-  $repos = hiera('sys11puppet::master::repos', false),
+class autopuppet::profile::master::main(
+  $puppet_master = hiera('autopuppet::common::puppet_master', $::puppet_master),
+  $config_path = hiera('autopuppet::master::config_path', undef),
+  $reporturl = hiera('autopuppet::master::reporturl', ''),
+  $reports = hiera('autopuppet::master::reports'),
+  $modulepath = hiera('autopuppet::master::modulepath', false),
+  $repos = hiera('autopuppet::master::repos', false),
   $include_base_path = hiera('repodeploy::include_base_path', '/opt/puppet-modules-vcsrepo'),
-  $clientclean = hiera('sys11puppet::master::clientclean', false),
-  $environments = hiera('sys11puppet::master::environments', 'config'),
-  $masterenv = hiera('sys11puppet::master::masterenv', {}),
+  $clientclean = hiera('autopuppet::master::clientclean', false),
+  $environments = hiera('autopuppet::master::environments', 'config'),
+  $masterenv = hiera('autopuppet::master::masterenv', {}),
 ) {
   if $repos {
     $repos_keys = keys($repos)
@@ -19,7 +19,7 @@ class sys11puppet::profile::master::main(
   }
 
   if $clientclean {
-    class {'sys11puppet::profile::master::clientclean':
+    class {'autopuppet::profile::master::clientclean':
       # stunnel won't start without the SSL certificates generated in the course of master setup.
       require => Class['::puppet::master'],
       }

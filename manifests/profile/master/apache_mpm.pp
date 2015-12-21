@@ -1,4 +1,4 @@
-class sys11puppet::profile::master::apache_mpm(
+class autopuppet::profile::master::apache_mpm(
   $mpm = hiera('apache::mpm_module', 'event'),
 ) {
   if $mpm != 'event' {

@@ -1,17 +1,17 @@
 # Sets up a puppet master.
-class sys11puppet::role::puppetmaster(
-  $enable_dashboard = hiera('sys11puppet::dashboard::enable'),
+class autopuppet::role::puppetmaster(
+  $enable_dashboard = hiera('autopuppet::dashboard::enable'),
 ) {
-  # os-395, use sys11puppet::role::puppetmaster and ::agent in combination
+  # os-395, use autopuppet::role::puppetmaster and ::agent in combination
   contain puppet::repo::puppetlabs
-  include sys11puppet::profile::reportclean
+  include autopuppet::profile::reportclean
 
-  class {'sys11puppet::profile::master::main':}
-  class {'sys11puppet::profile::master::monitoring':}
+  class {'autopuppet::profile::master::main':}
+  class {'autopuppet::profile::master::monitoring':}
 
   if $enable_dashboard {
-    class {'sys11puppet::profile::dashboard':
-      require => Class['sys11puppet::profile::master'],
+    class {'autopuppet::profile::dashboard':
+      require => Class['autopuppet::profile::master'],
     }
   }
 }

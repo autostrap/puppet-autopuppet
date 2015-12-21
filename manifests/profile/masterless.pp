@@ -1,6 +1,6 @@
-class sys11puppet::profile::masterless(
-  $runinterval = hiera('sys11puppet::masterless::runinterval', 5),
-  $noopvalue = hiera('sys11puppet::masterless::noop', false),
+class autopuppet::profile::masterless(
+  $runinterval = hiera('autopuppet::masterless::runinterval', 5),
+  $noopvalue = hiera('autopuppet::masterless::noop', false),
 ) {
     $command_noop = '/usr/local/sbin/run_puppet_hiera --noop --logdest syslog >/dev/null 2>&1'
     $command = '/usr/local/sbin/run_puppet_hiera --logdest syslog >/dev/null 2>&1'

@@ -1,7 +1,7 @@
-class sys11puppet::profile::dashboard(
-  $mysql_root_password = hiera('sys11puppet::dashboard::mysql_root_password'),
-  $mysql_user = hiera('sys11puppet::dashboard::mysql_user'),
-  $mysql_password = hiera('sys11puppet::dashboard::mysql_password'),
+class autopuppet::profile::dashboard(
+  $mysql_root_password = hiera('autopuppet::dashboard::mysql_root_password'),
+  $mysql_user = hiera('autopuppet::dashboard::mysql_user'),
+  $mysql_password = hiera('autopuppet::dashboard::mysql_password'),
 ) {
   class { '::mysql::server':
       root_password => $mysql_root_password,
